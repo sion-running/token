@@ -1,7 +1,10 @@
 package com.practice.token.exception;
 
+import lombok.Getter;
+
 import java.util.Objects;
 
+@Getter
 public class ApplicationException extends RuntimeException {
     private ErrorCode errorCode;
     private String desc;
@@ -21,9 +24,9 @@ public class ApplicationException extends RuntimeException {
     @Override
     public String getMessage() {
         if (Objects.isNull(param)) {
-            return String.format("%s. %s", errorCode.getDesc(), desc);
+            return String.format("%s. %s", errorCode.name(), desc);
         }
 
-        return String.format("%s. %s caused by %s.", errorCode.getDesc(), desc, param);
+        return String.format("%s. caused by %s.", errorCode.name(), param);
     }
 }

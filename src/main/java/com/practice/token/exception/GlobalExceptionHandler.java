@@ -28,4 +28,12 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest().body(errors);
     }
+
+    @ExceptionHandler(ApplicationException.class)
+    public ResponseEntity<?> errorHandler(ApplicationException e) {
+        ErrorResponse errorResponse = ErrorResponse.builder().errorCode(e.getErrorCode()).param(e.getParam()).build();
+
+        return ResponseEntity.status(e.getErrorCode().getStatus())
+                .body(errorResponse);
+    }
 }
