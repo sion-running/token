@@ -1,0 +1,29 @@
+package com.practice.token.exception;
+
+import java.util.Objects;
+
+public class ApplicationException extends RuntimeException {
+    private ErrorCode errorCode;
+    private String desc;
+    private String param;
+
+    public ApplicationException(ErrorCode errorCode) {
+        this.errorCode = errorCode;
+        this.desc = errorCode.getDesc();
+    }
+
+    public ApplicationException(ErrorCode errorCode, String param) {
+        this.errorCode = errorCode;
+        this.desc = errorCode.getDesc();
+        this.param = param;
+    }
+
+    @Override
+    public String getMessage() {
+        if (Objects.isNull(param)) {
+            return String.format("%s. %s", errorCode.getDesc(), desc);
+        }
+
+        return String.format("%s. %s caused by %s.", errorCode.getDesc(), desc, param);
+    }
+}
