@@ -18,3 +18,8 @@ spring:
     database: mysql
 logging.level:
   org.hibernate.SQL: debug
+
+jwt:
+  secret-key: simple_token.project_2024_09.secret_key
+  # 1 day
+  token.expired-time-ms: 86400000
