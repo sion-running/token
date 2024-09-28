@@ -18,7 +18,7 @@ public class JoinService {
     private final PasswordEncoder encoder;
 
     public UserDto join(UserJoinRequest request) {
-        userRepository.findByUserName(request.getUserName()).ifPresent(it -> {
+        userRepository.findByUsername(request.getUserName()).ifPresent(it -> {
             throw new ApplicationException(ErrorCode.DUPLICATE_USER_NAME, request.getUserName());
         });
 
