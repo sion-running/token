@@ -36,11 +36,6 @@ public class JwtTokenUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public Boolean isTokenExpired(String token) {
-        Date expiration = extractAllClaims(token, secretKey).getExpiration();
-        return expiration.before(new Date());
-    }
-
     public String generateAccessToken(String username) {
         Claims claims = Jwts.claims();
         claims.put("username", username);
