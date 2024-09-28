@@ -13,7 +13,7 @@ public class UserDto {
     public static UserDto fromEntity(User user) {
         return UserDto.builder()
                 .id(user.getId())
-                .userName(user.getUsername())
+                .userName(user.getUserName())
                 .build();
     }
 }
