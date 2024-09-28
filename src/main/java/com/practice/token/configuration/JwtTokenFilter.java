@@ -4,6 +4,7 @@ import com.practice.token.exception.ErrorCode;
 import com.practice.token.model.entity.User;
 import com.practice.token.service.UserService;
 import com.practice.token.util.JwtTokenUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -53,7 +54,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             String userName = jwtTokenUtil.getUsernameByToken(token);
             User user = userService.findUserOrElseThrow(userName);
 
-            if (jwtTokenUtil.isTokenExpired(token) || !userName.equals(user.getUsername())) {
+            if (!userName.equals(user.getUsername())) {
                 chain.doFilter(request, response);
                 return;
             }
@@ -64,8 +65,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (ExpiredJwtException e) {
+            request.setAttribute(ErrorCode.INVALID_TOKEN.name(), ErrorCode.EXPIRED_TOKEN.name());
         } catch (Exception e) {
-            request.setAttribute(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.getDesc());
+            request.setAttribute(ErrorCode.INVALID_TOKEN.name(), ErrorCode.INVALID_TOKEN.name());
         }
 
         chain.doFilter(request, response);
