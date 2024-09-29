@@ -19,7 +19,7 @@ public class TokenService {
         String refreshToken = generateRefreshToken(userName);
 
         return TokenDto.builder()
-                .accessToken(jwtTokenUtil.generateAccessToken(userName))
+                .accessToken(jwtTokenUtil.createAccessToken(userName))
                 .refreshToken(refreshToken)
                 .build();
     }
@@ -28,7 +28,7 @@ public class TokenService {
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserName(userName);
         refreshToken.ifPresent(refreshTokenRepository::delete);
 
-        String token = jwtTokenUtil.generateRefreshToken();
+        String token = jwtTokenUtil.createRefreshToken();
         refreshTokenRepository.save(RefreshToken.builder().userName(userName).token(token).build());
 
         return token;

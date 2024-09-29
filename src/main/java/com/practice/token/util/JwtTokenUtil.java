@@ -36,7 +36,7 @@ public class JwtTokenUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateAccessToken(String username) {
+    public String createAccessToken(String username) {
         Claims claims = Jwts.claims();
         claims.put("username", username);
 
@@ -48,7 +48,7 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public String generateRefreshToken() {
+    public String createRefreshToken() {
         return Jwts.builder()
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiredTimeMs * 7))
