@@ -25,13 +25,9 @@ public class TokenService {
     }
 
     public String generateRefreshToken(String userName) {
-        // 1. 저장된 토큰이 있는가?
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserName(userName);
-
-        // 2. 있다면 삭제
         refreshToken.ifPresent(refreshTokenRepository::delete);
 
-        // 3. 없다면 생성 후 저장
         String token = jwtTokenUtil.generateRefreshToken();
         refreshTokenRepository.save(RefreshToken.builder().userName(userName).token(token).build());
 
