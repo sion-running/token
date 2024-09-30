@@ -28,7 +28,7 @@ public class JwtTokenUtil {
     }
 
     public String getUsernameByToken(String token) {
-        return extractAllClaims(token, secretKey).get("username", String.class);
+        return extractAllClaims(token, secretKey).getSubject();
     }
 
     private Key getSigningKey(String secretKey) {
@@ -38,7 +38,7 @@ public class JwtTokenUtil {
 
     public String createAccessToken(String username) {
         Claims claims = Jwts.claims();
-        claims.put("username", username);
+        claims.setSubject(username);
 
         return Jwts.builder()
                 .setClaims(claims)
