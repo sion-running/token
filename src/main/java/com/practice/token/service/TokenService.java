@@ -27,8 +27,7 @@ public class TokenService {
     }
 
     public String generateRefreshToken(String userName) {
-        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserName(userName);
-        refreshToken.ifPresent(refreshTokenRepository::delete);
+        deleteRefreshTokenByUserName(userName);
 
         String token = jwtTokenUtil.createRefreshToken(userName);
         refreshTokenRepository.save(RefreshToken.builder().userName(userName).token(token).build());
@@ -47,4 +46,8 @@ public class TokenService {
         }
     }
 
+    public void deleteRefreshTokenByUserName(String userName) {
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserName(userName);
+        refreshToken.ifPresent(refreshTokenRepository::delete);
+    }
 }
