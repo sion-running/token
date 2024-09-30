@@ -48,8 +48,12 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public String createRefreshToken() {
+    public String createRefreshToken(String username) {
+        Claims claims = Jwts.claims();
+        claims.setSubject(username);
+
         return Jwts.builder()
+                .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiredTimeMs * 7))
                 .signWith(getSigningKey(secretKey), SignatureAlgorithm.HS256)
