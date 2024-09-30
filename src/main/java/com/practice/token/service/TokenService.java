@@ -1,5 +1,7 @@
 package com.practice.token.service;
 
+import com.practice.token.exception.ApplicationException;
+import com.practice.token.exception.ErrorCode;
 import com.practice.token.model.dto.TokenDto;
 import com.practice.token.model.entity.RefreshToken;
 import com.practice.token.repository.RefreshTokenRepository;
@@ -28,10 +30,21 @@ public class TokenService {
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserName(userName);
         refreshToken.ifPresent(refreshTokenRepository::delete);
 
-        String token = jwtTokenUtil.createRefreshToken();
+        String token = jwtTokenUtil.createRefreshToken(userName);
         refreshTokenRepository.save(RefreshToken.builder().userName(userName).token(token).build());
 
         return token;
+    }
+
+    public TokenDto reissueRefreshToken(String refreshToken) {
+        try {
+            String userName = jwtTokenUtil.getUsernameByToken(refreshToken);
+            RefreshToken existing = refreshTokenRepository.findByUserName(userName).get();
+
+            return getToken(userName);
+        } catch (Exception e) {
+            throw new ApplicationException(ErrorCode.INVALID_TOKEN);
+        }
     }
 
 }

@@ -37,7 +37,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         final String requestURI = request.getRequestURI();
 
         // 허용된 경로에서 JWT 검증 건너뛰기
-        if (requestURI.equals("/join") || requestURI.equals("/login") || requestURI.equals("/token/refresh")) {
+        if (requestURI.equals("/join") || requestURI.equals("/login") || requestURI.equals("/login/refresh")) {
             chain.doFilter(request, response);
             return;
         }
