@@ -10,6 +10,8 @@ public enum ErrorCode {
     DUPLICATE_USER_NAME(HttpStatus.CONFLICT, "Duplicate user name"),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, null),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, null),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, null),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, null),
     ;
 
     private final HttpStatus status;

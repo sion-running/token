@@ -28,7 +28,7 @@ public class JwtTokenUtil {
     }
 
     public String getUsernameByToken(String token) {
-        return extractAllClaims(token, secretKey).get("username", String.class);
+        return extractAllClaims(token, secretKey).getSubject();
     }
 
     private Key getSigningKey(String secretKey) {
@@ -36,14 +36,9 @@ public class JwtTokenUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public Boolean isTokenExpired(String token) {
-        Date expiration = extractAllClaims(token, secretKey).getExpiration();
-        return expiration.before(new Date());
-    }
-
-    public String generateAccessToken(String username) {
+    public String createAccessToken(String username) {
         Claims claims = Jwts.claims();
-        claims.put("username", username);
+        claims.setSubject(username);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -53,8 +48,12 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public String generateRefreshToken() {
+    public String createRefreshToken(String username) {
+        Claims claims = Jwts.claims();
+        claims.setSubject(username);
+
         return Jwts.builder()
+                .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiredTimeMs * 7))
                 .signWith(getSigningKey(secretKey), SignatureAlgorithm.HS256)
