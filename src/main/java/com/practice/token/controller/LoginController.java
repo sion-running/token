@@ -6,6 +6,7 @@ import com.practice.token.service.LoginService;
 import com.practice.token.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +22,12 @@ public class LoginController {
     public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginRequest request) {
         TokenDto token = loginService.login(request);
         return ResponseEntity.ok(token);
+    }
+
+    @PostMapping("/invalidate")
+    public ResponseEntity<Void> logout(Authentication authentication) {
+        loginService.logout(authentication.getName());
+        return ResponseEntity.ok().body(null);
     }
 
     @GetMapping("/refresh")

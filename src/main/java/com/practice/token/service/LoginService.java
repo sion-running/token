@@ -25,4 +25,8 @@ public class LoginService {
 
         return tokenService.getToken(user.getUsername());
     }
+
+    public void logout(String userName) {
+        tokenService.deleteRefreshTokenByUserName(userName);
+    }
 }
