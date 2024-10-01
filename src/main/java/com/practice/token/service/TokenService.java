@@ -46,13 +46,13 @@ public class TokenService {
     }
 
     public void deleteRefreshTokenByUserName(String userName) {
-        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserName(userName);
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findById(userName);
         refreshToken.ifPresent(refreshTokenRepository::delete);
     }
 
     public void validateRefreshToken(String refreshToken) {
         String userName = jwtTokenUtil.getUsernameByToken(refreshToken);
-        RefreshToken existing = refreshTokenRepository.findByUserName(userName).get();
+        RefreshToken existing = refreshTokenRepository.findById(userName).get();
 
         if (!existing.getToken().equals(refreshToken)) {
             throw new ApplicationException(ErrorCode.INVALID_TOKEN);
