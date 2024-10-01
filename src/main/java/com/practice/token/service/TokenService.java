@@ -37,17 +37,25 @@ public class TokenService {
 
     public TokenDto reissueRefreshToken(String refreshToken) {
         try {
-            String userName = jwtTokenUtil.getUsernameByToken(refreshToken);
-            RefreshToken existing = refreshTokenRepository.findByUserName(userName).get();
-
-            return getToken(userName);
+            validateRefreshToken(refreshToken);
         } catch (Exception e) {
             throw new ApplicationException(ErrorCode.INVALID_TOKEN);
         }
+
+        return getToken(jwtTokenUtil.getUsernameByToken(refreshToken));
     }
 
     public void deleteRefreshTokenByUserName(String userName) {
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserName(userName);
         refreshToken.ifPresent(refreshTokenRepository::delete);
+    }
+
+    public void validateRefreshToken(String refreshToken) {
+        String userName = jwtTokenUtil.getUsernameByToken(refreshToken);
+        RefreshToken existing = refreshTokenRepository.findByUserName(userName).get();
+
+        if (!existing.getToken().equals(refreshToken)) {
+            throw new ApplicationException(ErrorCode.INVALID_TOKEN);
+        }
     }
 }
