@@ -4,22 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.annotation.Id;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@RedisHash(value = "token", timeToLive = 120)
 public class RefreshToken {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column
     private String userName;
 
-    @Column
     private String token;
 }
